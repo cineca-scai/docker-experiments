@@ -10,3 +10,6 @@ irodsdata:
     image: busybox
     volumes:
         - /test
+
+# Note: i have not yet defined the right volumes.
+# Work in progress
