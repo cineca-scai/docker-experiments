@@ -21,7 +21,7 @@ sqladmin:
 #################################
 # iRODS iCAT server
 icat:
-    image: cineca/irods
+    image: cineca/icat
     hostname: rodserver
     command: sleep 1234567890
     links:
