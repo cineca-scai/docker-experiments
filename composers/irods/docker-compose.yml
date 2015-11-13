@@ -1,6 +1,17 @@
 
 #################################
-# iRODS iCAT server
+# Data containers from common
+sqldata:
+  extends:
+    file: common.yml
+    service: sqldata
+irodsdata:
+  extends:
+    file: common.yml
+    service: sqldata
+
+#################################
+# Postgres database server
 sql:
     image: postgres
     volumes:
@@ -9,14 +20,6 @@ sql:
         POSTGRES_USER: irods
         POSTGRES_PASSWORD: icatserver
         POSTGRES_DB: ICAT
-
-# This image let you access the postgres db with a 'phpmyadmin' like web page
-sqladmin:
-    image: clue/adminer
-    links:
-        - sql:db
-    ports:
-        - 8080:80
 
 #################################
 # iRODS iCAT server

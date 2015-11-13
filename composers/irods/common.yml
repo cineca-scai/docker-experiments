@@ -1,0 +1,12 @@
+
+#################################
+# Data containers definition
+
+sqldata:
+    image: busybox
+    volumes:
+        - /data
+irodsdata:
+    image: busybox
+    volumes:
+        - /test

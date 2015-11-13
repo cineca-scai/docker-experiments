@@ -25,3 +25,10 @@ To verify if everything is succesfull:
 ```bash
 irods@rodserver:/tmp$ ils
 ```
+
+## Admin database
+
+```bash
+# Add admin configuration to composer
+docker-compose -f docker-compose.yml -f docker-compose.admin.yml up
+```
