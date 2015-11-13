@@ -5,11 +5,11 @@
 sqldata:
     image: busybox
     volumes:
-        - /data
+        - /var/lib/postgresql/data
 irodsdata:
     image: busybox
     volumes:
-        - /test
+        - /var/lib/irods
 
 # Note: i have not yet defined the right volumes.
 # Work in progress
