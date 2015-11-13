@@ -29,6 +29,8 @@ icat:
     image: cineca/icat
     volumes:
         - irodsdata:/var/lib/irods
+    working_dir:
+        - /home/irods
     hostname: rodserver
     command: sleep 1234567890
     links:

@@ -13,4 +13,9 @@ sql:
         - ./confs/pgs_init.sh:/docker-entrypoint-initdb.d/setup-my-schema.sh
 
 icat:
-    command: sleep 1
+    command: ./install
+    working_dir:
+        - /tmp
+    volumes:
+        - ./confs/expect_irods.sh:/tmp/eirods
+        - ./confs/install_irods.sh:/tmp/install
