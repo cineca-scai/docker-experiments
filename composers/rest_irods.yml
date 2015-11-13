@@ -1,0 +1,7 @@
+#################################
+# iRODS iCAT server
+db:
+    image: postgres
+icat:
+    image: cineca/irods
+    command: sleep 1234567890
