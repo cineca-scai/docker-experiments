@@ -27,11 +27,12 @@ sql:
 # iRODS iCAT server
 icat:
     image: cineca/icat
-    volumes:
-        - irodsdata:/var/lib/irods
-    working_dir:
-        - /home/irods
     hostname: rodserver
+    # volumes:
+    #     # - irodsconf:/etc/irods
+    #     # - irodsdata:/home/irods
+    #     - ./confs/expect_irods.sh:/tmp/expect
+    working_dir: /home/irods
     command: sleep 1234567890
     links:
         - sql:db

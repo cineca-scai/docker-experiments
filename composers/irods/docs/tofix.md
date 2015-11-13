@@ -10,7 +10,7 @@ irods@rodserver:/tmp$ sudo /var/lib/irods/packaging/setup_irods.sh
 You may accept all the default options, except for:
 
 * DB host is `db`
-* passwords are always `icatserver`
+* passwords are for default `icatserver`. Inside icat, it is stored as $IRODS_PASS
 
 To verify if everything is succesfull:
 
