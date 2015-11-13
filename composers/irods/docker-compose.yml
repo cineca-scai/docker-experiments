@@ -4,12 +4,13 @@
 sql:
     image: postgres
     volumes:
-        - ./myirods/pgs_init.sh:/docker-entrypoint-initdb.d/setup-my-schema.sh
+        - ./confs/pgs_init.sh:/docker-entrypoint-initdb.d/setup-my-schema.sh
     environment:
         POSTGRES_USER: irods
-        POSTGRES_PASSWORD: asupersecretpwd
+        POSTGRES_PASSWORD: icatserver
         POSTGRES_DB: ICAT
 
+# This image let you access the postgres db with a 'phpmyadmin' like web page
 sqladmin:
     image: clue/adminer
     links:
