@@ -7,7 +7,7 @@ MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 # install instructions: https://docs.irods.org/4.1.5/manual/installation
 
 RUN apt-get update && apt-get install -y wget \
-    # git \
+    git \
     lsof sudo libfuse2 libjson-perl \
     unixodbc odbc-postgresql postgresql-client super \
     python python-psutil python-requests python-jsonschema \
@@ -37,3 +37,5 @@ USER $IRODS_USER
 
 # Resource Server ?
 # https://docs.irods.org/4.1.5/manual/installation/#resource-server
+
+RUN git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
