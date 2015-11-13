@@ -1,21 +1,23 @@
 
 #################################
-# Data containers from common
-sqldata:
-  extends:
-    file: common.yml
-    service: sqldata
-irodsdata:
-  extends:
-    file: common.yml
-    service: sqldata
+# Data volumes
+
+# EXPECTING:
+# $ docker volume ls
+# DRIVER              VOLUME NAME
+# local               sqldata
+# local               irodsdata
+
+# To CREATE THEM the first time:
+# $ docker volume create --name sqldata
+# $ docker volume create --name irodsdata
 
 #################################
 # Postgres database server
 sql:
     image: postgres
     volumes:
-        - ./confs/pgs_init.sh:/docker-entrypoint-initdb.d/setup-my-schema.sh
+        - sqldata:/var/lib/postgresql/data
     environment:
         POSTGRES_USER: irods
         POSTGRES_PASSWORD: icatserver
@@ -25,10 +27,11 @@ sql:
 # iRODS iCAT server
 icat:
     image: cineca/icat
+    volumes:
+        - irodsdata:/var/lib/irods
     hostname: rodserver
     command: sleep 1234567890
     links:
         - sql:db
 
 #################################
-# The END
