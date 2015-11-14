@@ -41,7 +41,19 @@ docker-compose -f docker-compose.yml -f init.yml up -d sql
 ### iRODS configuration
 
 iRODS server image is ready to be linked to an existing database.
+
 If you created the database and username inside the previous paragraph, you are ready to enable this service with the command:
 ```bash
 # to test
+```
+
+*Warning*: In case you really need to debug the connection from the icat container to the postgres db you could try with:
+```bash
+$ docker-compose up -d
+$ docker exec -it irods_icat_1 bash
+$ psql -h db -W -d ICAT
+# enter password
+
+psql (9.4.5)
+ICAT=#
 ```

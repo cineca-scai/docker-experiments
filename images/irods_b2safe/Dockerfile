@@ -3,6 +3,15 @@ FROM ubuntu:15.10
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 
 ##########################################################################
+# Base setup
+ENV DEBIAN_FRONTEND "noninteractive"
+RUN apt-get update && apt-get upgrade -y
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+
+##########################################################################
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     wget git expect \
@@ -18,12 +27,8 @@ WORKDIR /tmp
 ENV IRODSFTP "ftp://ftp.renci.org/pub/irods/releases/4.1.6/ubuntu14"
 RUN wget -q $IRODSFTP/irods-icat-4.1.6-ubuntu14-x86_64.deb
 RUN wget -q $IRODSFTP/irods-database-plugin-postgres-1.6-ubuntu14-x86_64.deb
-#RUN dpkg -i *.deb
-
-# If you need to save irods modifications:
-VOLUME /etc/irods
-VOLUME /var/lib/irods
-VOLUME /home/irods
+RUN dpkg -i irods*icat*.deb && dpkg -i irods*plugin*.deb
+RUN cp -r /etc/irods /tmp/etcirods
 
 ##########################################################################
 # A default system PostgreSQL installation is configured for ident-based auth
@@ -32,7 +37,6 @@ ENV IRODS_USER "irods"
 ENV IRODS_PASS "icatserver"
 RUN useradd -ms /bin/bash $IRODS_USER
 RUN yes $IRODS_PASS | passwd $IRODS_USER
-ENV HOME /home/$IRODS_USER
 RUN adduser $IRODS_USER sudo
 USER $IRODS_USER
 ENV TERM xterm
@@ -47,4 +51,6 @@ ENV TERM xterm
 
 ##########################################################################
 # Clone eudat repo
-RUN git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
+# RUN git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
+
+EXPOSE 1247
