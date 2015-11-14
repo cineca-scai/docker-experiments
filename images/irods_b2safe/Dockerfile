@@ -27,8 +27,6 @@ WORKDIR /tmp
 ENV IRODSFTP "ftp://ftp.renci.org/pub/irods/releases/4.1.6/ubuntu14"
 RUN wget -q $IRODSFTP/irods-icat-4.1.6-ubuntu14-x86_64.deb
 RUN wget -q $IRODSFTP/irods-database-plugin-postgres-1.6-ubuntu14-x86_64.deb
-RUN dpkg -i irods*icat*.deb && dpkg -i irods*plugin*.deb
-RUN cp -r /etc/irods /tmp/etcirods
 
 ##########################################################################
 # A default system PostgreSQL installation is configured for ident-based auth
@@ -40,6 +38,9 @@ RUN yes $IRODS_PASS | passwd $IRODS_USER
 RUN adduser $IRODS_USER sudo
 USER $IRODS_USER
 ENV TERM xterm
+
+RUN yes $IRODS_PASS | sudo -S dpkg -i irods*.deb
+RUN cp -r /etc/irods /tmp/etcirods
 
 ##########################################################################
 # Install irods + connect to postgres

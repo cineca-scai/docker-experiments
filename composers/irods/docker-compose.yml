@@ -1,18 +1,5 @@
 
 #################################
-# Data volumes
-
-# EXPECTING:
-# $ docker volume ls
-# DRIVER              VOLUME NAME
-# local               sqldata
-# local               irodsdata
-
-# To CREATE THEM the first time:
-# $ docker volume create --name sqldata
-# $ docker volume create --name irodsdata
-
-#################################
 # Postgres database server
 sql:
     image: postgres
@@ -31,8 +18,17 @@ icat:
     volumes:
         - irodsconf:/etc/irods
         - irodshome:/home/irods
-    command: sleep infinity
+        - ./boot.sh:/bootstrap
+    command: /bootstrap
     links:
         - sql:db
 
 #################################
+
+# TO DO:
+
+# 0. extract from deb /etc files
+# 1. remove expect and use stdin redirection
+# 2. a script to boot irods (second run)
+# 3. check resource server
+# 4. modify README (init and volume listing)

@@ -3,7 +3,7 @@
 user=`whoami`
 p1="/home/$user"
 p2="/etc/$user"
-p3="/var/lib/$user"
+#p3="/var/lib/$user"
 
 ########################################################
 yes $IRODS_PASS | sudo -S echo "Enabling priviledges"
@@ -21,7 +21,7 @@ sudo cp /tmp/etcirods/* $p2/
 echo "Fixing permissions"
 sudo chown -R $UID:$GROUPS $p1
 sudo chown -R $UID:$GROUPS $p2
-sudo chown -R $UID:$GROUPS $p3
+#sudo chown -R $UID:$GROUPS $p3
 
 #########################################################
 # Connect server to DB and init
@@ -31,12 +31,12 @@ MYDB=`echo $DB_NAME | sed 's/\/[a-z_0-9]\+\///'`
 
 #########################################################
 # Check if it works
-sleep 5
+sleep 6
 echo "Testing"
-yes $IRODS_PASS | ils
+yes $IRODS_PASS | ils 2> /dev/null
+echo "Connected"
 
 # /etc/irods
 # database_config.json, server_config.json, service_account.config
-
 # /home
 # Validating [/home/irods/.irods/irods_environment.json]... Success

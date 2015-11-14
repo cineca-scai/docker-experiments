@@ -1,8 +1,8 @@
-#  The idea is to extende the original composer
+#  The idea is to extend the original composer
 # to add some init command to launch only the first time.
 
-# After init data will be saved as volumes inside the datacontainers.
-# Note: do not remove datacontainers from your docker environment!
+# After init data will be saved as volumes.
+# Note: do not remove volumes from your docker environment!
 
 # Instructions followed to extend the original composer:
 # https://docs.docker.com/compose/extends/#example-use-case
@@ -13,7 +13,7 @@ sql:
         - ./confs/pgs_init.sh:/docker-entrypoint-initdb.d/setup-my-schema.sh
 
 icat:
-    #command: /install
+    command: /install
     volumes:
         - ./confs/expect_irods.sh:/expect_irods
         - ./confs/install_irods.sh:/install
