@@ -7,13 +7,16 @@ p2="/etc/$user"
 
 ########################################################
 yes $IRODS_PASS | sudo -S echo "Enabling priviledges"
+# Wait for sql init/creation
+sleep 10
 
 # ########################################################
-# # Install irods packages (to be saved inside volumes)
-# cd /tmp
-# echo "(re)Install irods"
-# sudo dpkg -i irods*.deb
-sudo cp /tmp/etcirods/* $p2/
+# Install irods packages (to be saved inside volumes)
+cd /tmp
+echo "Fix missing files for volumes"
+#dpkg -x irods*icat*deb ./copy
+sudo cp copy/etcirods/* $p2/
+rm -r copy
 
 #########################################################
 # Note: using docker volumes, it requires a permission fix, until:

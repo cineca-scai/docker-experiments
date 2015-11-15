@@ -1,4 +1,7 @@
 
+# inspiration from:
+#https://github.com/irods/contrib/blob/master/irods-docker/icat/Dockerfile
+
 #################################
 # Postgres database server
 sql:
@@ -19,11 +22,16 @@ icat:
         - irodsconf:/etc/irods
         - irodshome:/home/irods
         - ./boot.sh:/bootstrap
+    working_dir: /home/irods
     command: /bootstrap
     links:
         - sql:db
 
 #################################
+
+# docker-compose -f docker-compose.yml -f init.yml up -d
+# docker logs -f irods_icat_1
+# docker-compose up
 
 # TO DO:
 

@@ -14,7 +14,7 @@ sql:
 
 icat:
     command: /install
+    #command: sleep infinity
     volumes:
         - ./confs/expect_irods.sh:/expect_irods
         - ./confs/install_irods.sh:/install
-    #tty: true

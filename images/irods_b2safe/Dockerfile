@@ -37,10 +37,18 @@ RUN useradd -ms /bin/bash $IRODS_USER
 RUN yes $IRODS_PASS | passwd $IRODS_USER
 RUN adduser $IRODS_USER sudo
 USER $IRODS_USER
-ENV TERM xterm
 
+##########################################################################
+# Install and enable persistence
 RUN yes $IRODS_PASS | sudo -S dpkg -i irods*.deb
-RUN cp -r /etc/irods /tmp/etcirods
+
+## How it should be...
+# Saving configuration files for persistence on irods modifications
+#VOLUME /etc/irods
+
+## The bad hack. Change it in future docker releases,
+## when volumes mapping would probably be available and easy
+RUN mkdir copy && rsync -av /etc/irods/ copy/etcirods/
 
 ##########################################################################
 # Install irods + connect to postgres
@@ -54,4 +62,5 @@ RUN cp -r /etc/irods /tmp/etcirods
 # Clone eudat repo
 # RUN git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
 
+ENV TERM xterm
 EXPOSE 1247
