@@ -30,6 +30,12 @@ $ docker exec -it irods_icat_1 bash
 irods@rodserver:~$ ils
 /tempZone/home/rods:
 
+### Restarting the irods server
+
+```bash
+$ docker exec -t irods_icat_1 /etc/init.d/irods restart
+```
+
 ### Connecting to irods with another container as a client
 
 You may launch a new container using the same docker image.
@@ -37,6 +43,9 @@ This will allow you to access the latest icommands to test
 a connection from outside.
 
 ```bash
+$ docker run -it --link irods_icat_1:rodserver cineca/icat bash
+# then from inside the new container...
+
 # See what is the current passw
 echo $IRODS_PASS
 

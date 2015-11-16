@@ -1,5 +1,5 @@
-
-# inspiration from:
+########################
+# took inspiration from:
 #https://github.com/irods/contrib/blob/master/irods-docker/icat/Dockerfile
 
 #################################
@@ -18,25 +18,15 @@ sql:
 icat:
     image: cineca/icat
     hostname: rodserver
+    #command: sleep infinity
     volumes:
         - irodsconf:/etc/irods
         - irodshome:/home/irods
-        - ./boot.sh:/bootstrap
-    working_dir: /home/irods
-    command: /bootstrap
     links:
         - sql:db
 
 #################################
 
-# docker-compose -f docker-compose.yml -f init.yml up -d
-# docker logs -f irods_icat_1
-# docker-compose up
-
-# TO DO:
-
-# 0. extract from deb /etc files
-# 1. remove expect and use stdin redirection
-# 2. a script to boot irods (second run)
-# 3. check resource server
-# 4. modify README (init and volume listing)
+# $ docker-compose -f docker-compose.yml -f init.yml up -d
+## wait the operations and then press CTRL-c
+# $ docker-compose up

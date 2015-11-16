@@ -29,6 +29,14 @@ RUN wget -q $IRODSFTP/irods-icat-4.1.6-ubuntu14-x86_64.deb
 RUN wget -q $IRODSFTP/irods-database-plugin-postgres-1.6-ubuntu14-x86_64.deb
 
 ##########################################################################
+# install scripts
+ADD expect_irods.sh /tmp/expect_irods
+ADD install_irods.sh /install
+# boot up script
+ADD bootstrap.sh /bootup
+CMD ["/bootup"]
+
+##########################################################################
 # A default system PostgreSQL installation is configured for ident-based auth
 # means the unix service account name must match the database user name
 ENV IRODS_USER "irods"
@@ -39,15 +47,14 @@ RUN adduser $IRODS_USER sudo
 USER $IRODS_USER
 
 ##########################################################################
-# Install and enable persistence
-RUN yes $IRODS_PASS | sudo -S dpkg -i irods*.deb
-
 ## How it should be...
 # Saving configuration files for persistence on irods modifications
 #VOLUME /etc/irods
 
 ## The bad hack. Change it in future docker releases,
 ## when volumes mapping would probably be available and easy
+RUN yes $IRODS_PASS | sudo -S dpkg -i irods*.deb
+# Installed, so enable persistence
 RUN mkdir copy && rsync -av /etc/irods/ copy/etcirods/
 
 ##########################################################################
@@ -60,7 +67,11 @@ RUN mkdir copy && rsync -av /etc/irods/ copy/etcirods/
 
 ##########################################################################
 # Clone eudat repo
-# RUN git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
+# Should this go into another Image?
+#RUN git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
 
+##########################################################################
+# Closing operations
 ENV TERM xterm
+WORKDIR /home/$USER
 EXPOSE 1247
