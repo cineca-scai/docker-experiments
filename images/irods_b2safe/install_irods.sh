@@ -9,7 +9,7 @@ cd /tmp
 ########################################################
 yes $IRODS_PASS | sudo -S echo "Enabling priviledges"
 # Wait for sql init/creation
-sleep 5
+sleep 7
 
 # ########################################################
 # Using the volume
@@ -36,4 +36,8 @@ sudo /var/lib/irods/packaging/setup_irods.sh < $MYDATA
 sleep 5
 echo "Testing"
 yes $IRODS_PASS | ils 2> /dev/null
-echo "Connected"
+if [ "$?" -ne 0 ]; then
+    echo "Failed. Please check your internet connection!"
+else
+    echo "Connected"
+fi
