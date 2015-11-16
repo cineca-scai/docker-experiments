@@ -24,6 +24,12 @@ irods_icat_1   /bootstrap                       Up      1247/tcp
 irods_sql_1    /docker-entrypoint.sh postgres   Up      5432/tcp
 ```
 
+### Opening a shell inside the iRODS iCat server
+
+$ docker exec -it irods_icat_1 bash
+irods@rodserver:~$ ils
+/tempZone/home/rods:
+
 ### Connecting to irods with another container as a client
 
 `To be written...`

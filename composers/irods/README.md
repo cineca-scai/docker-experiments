@@ -9,10 +9,10 @@ You should expect things not to work.
 
 ## Pre-requisites
 
-Install on your system:
+Before starting please make sure that you have installed on your system:
 
-* [Docker]() 1.9+
-* [docker-compose]() 1.5+
+* [Docker](http://docs.docker.com/) 1.9+
+* [docker-compose](https://docs.docker.com/compose/) 1.5+
 
 ## Quick start
 

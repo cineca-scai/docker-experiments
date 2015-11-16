@@ -3,18 +3,17 @@
 user=`whoami`
 p1="/home/$user"
 p2="/etc/$user"
-#p3="/var/lib/$user"
 
 ########################################################
 yes $IRODS_PASS | sudo -S echo "Enabling priviledges"
 # Wait for sql init/creation
-sleep 10
+sleep 5
 
 # ########################################################
-# Install irods packages (to be saved inside volumes)
+# Using the volume
+## Note: this should be removed when fixed the hack inside the dockerfile.
 cd /tmp
 echo "Fix missing files for volumes"
-#dpkg -x irods*icat*deb ./copy
 sudo cp copy/etcirods/* $p2/
 rm -r copy
 
@@ -24,22 +23,17 @@ rm -r copy
 echo "Fixing permissions"
 sudo chown -R $UID:$GROUPS $p1
 sudo chown -R $UID:$GROUPS $p2
-#sudo chown -R $UID:$GROUPS $p3
 
 #########################################################
 # Connect server to DB and init
 echo "Configure & connect"
-MYDB=`echo $DB_NAME | sed 's/\/[a-z_0-9]\+\///'`
-/expect_irods $IRODS_PASS $MYDB
+MYDATA="/tmp/answers"
+/expect_irods $MYDATA
+sudo /var/lib/irods/packaging/setup_irods.sh < $MYDATA
 
 #########################################################
 # Check if it works
-sleep 6
+sleep 5
 echo "Testing"
 yes $IRODS_PASS | ils 2> /dev/null
 echo "Connected"
-
-# /etc/irods
-# database_config.json, server_config.json, service_account.config
-# /home
-# Validating [/home/irods/.irods/irods_environment.json]... Success

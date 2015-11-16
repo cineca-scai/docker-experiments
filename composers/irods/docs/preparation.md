@@ -48,6 +48,10 @@ If you created the database and username inside the previous paragraph, you are 
 docker-compose -f docker-compose.yml -f init.yml up icat
 # we don't leave this operation in background
 # it will say "Connected" when everything has gone fine
+# [...]
+icat_1 | Connected
+irods_icat_1 exited with code 0
+# Press CTRL-c
 ```
 
 *Warning*: In case you have DB problems and you really need to debug the connection from the icat container to the postgres db you could try with:

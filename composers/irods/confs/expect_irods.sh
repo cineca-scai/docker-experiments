@@ -1,93 +1,60 @@
-#!/usr/bin/expect -f
-
-## WARNING: does not work yet
-
-if {[llength $argv] != 2} {
-    puts "usage: EXPECTSCRIPT password dbhost "
+#!/bin/bash
+if [ -z "$1" ]; then
+    echo "Usage $0 SCRIPT_NAME"
     exit 1
-}
+fi
 
-set password [lrange $argv 0 0]
-set mydb [lrange $argv 1 1]
-set timeout 2
-
-spawn sudo /var/lib/irods/packaging/setup_irods.sh
-match_max 100000
-
-# SUDO REQUEST
-expect "*assword for irods:*"
-send -- "$password\r"
-
-##############################
-# IRODS in itself
-
+# Clean
+SCRIPT=$1
+rm -rf $SCRIPT && touch $SCRIPT
 # account
-expect ":*"
-send -- "\r"
+echo "irods" >> $SCRIPT
 # group
-expect ":*"
-send -- "\r"
-
+echo "irods" >> $SCRIPT
 # zone
-expect "tempZone?:*"
-send -- "\r"
+echo "tempZone" >> $SCRIPT
 # port
-expect ":*"
-send -- "\r"
+echo "1247" >> $SCRIPT
 # range begin
-expect ":*"
-send -- "\r"
+echo "20000" >> $SCRIPT
 # range end
-expect ":*"
-send -- "\r"
+echo "20199" >> $SCRIPT
 # vault
-expect ":*"
-send -- "\r"
+echo "/var/lib/irods/Vault" >> $SCRIPT
 # zone key
-expect ":*"
-send -- "\r"
+(openssl rand -base64 16 2>/dev/null | sed 's,/,S,g' | sed 's,+,_,g' \
+    | cut -c 1-16  | tr -d '\n' ; echo "") >> $SCRIPT
 # negotation key
-expect ":*"
-send -- "\r"
+openssl rand -base64 32 2> /dev/null | sed 's,/,S,g' | sed 's,+,_,g' | cut -c 1-32 \
+    >> $SCRIPT
 # control plane port
-expect ":*"
-send -- "\r"
+echo "1248" >> $SCRIPT
 # control plane key
-expect ":*"
-send -- "\r"
+openssl rand -base64 32 2> /dev/null | sed 's,/,S,g' | sed 's,+,_,g' | cut -c 1-32 \
+    >> $SCRIPT
 # schema
-expect "configuration?:*"
-send -- "\r"
+echo "https://schemas.irods.org/configuration" >> $SCRIPT
 # account username
-expect ":*"
-send -- "\r"
+echo "rods" >> $SCRIPT
 # account password
-expect "password:*"
-send "$password\r"
+echo "$IRODS_PASS" >> $SCRIPT
 # Last confirmation
-expect "settings..yes.:"
-send "yes\r"
+echo "yes" >> $SCRIPT
 
 ##############################
 # DB accounting
 
 # server host name
-expect "or.IP.address:*"
-send -- "$mydb\r"
+echo $DB_NAME | sed 's/\/[a-z_0-9]\+\///' >> $SCRIPT
 # db port
-expect ".:*"
-send -- "\r"
+echo $DB_PORT | sed 's/tcp\:.\+\://' >> $SCRIPT
 # database name
-expect "ICAT.:*"
-send -- "\r"
+echo "$DB_ENV_POSTGRES_DB" >> $SCRIPT
 # database username
-expect "irods.:*"
-send -- "\r"
+echo "$DB_ENV_POSTGRES_USER" >> $SCRIPT
 # database password
-expect "password:*"
-send "$password\r"
+echo "$IRODS_PASS" >> $SCRIPT
 # Last confirmation
-expect "settings..yes.:"
-send "yes\r"
+echo "yes" >> $SCRIPT
 
-expect eof
+echo "DONE"
