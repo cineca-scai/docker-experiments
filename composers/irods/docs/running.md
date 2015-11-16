@@ -32,4 +32,26 @@ irods@rodserver:~$ ils
 
 ### Connecting to irods with another container as a client
 
-`To be written...`
+You may launch a new container using the same docker image.
+This will allow you to access the latest icommands to test
+a connection from outside.
+
+```bash
+# See what is the current passw
+echo $IRODS_PASS
+
+# Use the defaults values
+$ iinit
+Enter the host name (DNS) of the server to connect to: rodserver
+Enter the port number: 1247
+Enter your irods user name: rods
+Enter your irods zone: tempZone
+Enter your current iRODS password: # the one above
+```
+
+A security note:
+
+The main password is saved as an environment variable for development purpose.
+We will provide a way to change it in further development.
+Anyway, security for containers is best reached by avoiding connections/launching
+ containers from outside your net/LAN.

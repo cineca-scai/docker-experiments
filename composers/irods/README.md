@@ -20,12 +20,19 @@ If you need to jump in as soon as possible:
 
 ```bash
 # Clone repo
-git clone cineca/docker-experiments
+git clone https://github.com/cineca-scai/docker-experiments.git
 # Go into this directory
 cd composers/irods
 # Init services
 docker-compose -f docker-compose.yml -f init.yml up
-# When completed press CTRL-c and run the final services
+# When completed press CTRL-c
+# Check volumes for persistence
+docker volume ls
+##DRIVER              VOLUME NAME
+##local               sqldata
+##local               irodsconf
+##local               irodshome
+# ...and run the final services
 docker-compose up
 ```
 
@@ -35,3 +42,12 @@ For a more detailed explanation and some deep understanding:
 
 * [Preparing the environment](docs/preparation.md)
 * [Running the services](docs/running.md)
+
+## Versions
+
+```
+irods@rodserver:~$ apt-cache showpkg irods-icat
+Package: irods-icat
+Versions:
+4.1.6
+```
