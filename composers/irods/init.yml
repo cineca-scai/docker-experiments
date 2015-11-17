@@ -13,7 +13,10 @@ sql:
      - ./confs/pgs_init.sh:/docker-entrypoint-initdb.d/setup-my-schema.sh:ro
 
 icat:
-    #command: /install
-    command: sleep infinity
+    command: /install
+    #command: sleep infinity
     volumes: 
      - ./confs/credentials.conf:/myconfig:ro
+
+## TODO
+# - no more mods to credentials (with git)

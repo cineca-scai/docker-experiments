@@ -52,6 +52,14 @@ echo $HANDLE_PASS > $PASSFILE
 ./install.sh < $PASSFILE
 rm $PASSFILE
 
+# Check scripts
+cd /opt/eudat/b2safe/cmd
+./authZmanager.py -h
+./epicclient.py --help
+./logmanager.py -h
+./messageManager.py -h
+./metadataManager.py -h
+
 # Cleanup
 echo "Cleaning"
 sudo rm -rf /tmp/*
