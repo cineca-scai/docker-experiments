@@ -1,0 +1,8 @@
+##########################################################################
+FROM cineca/icat
+MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
+
+##########################################################################
+# Clone eudat repo
+# Should this go into another Image?
+#RUN git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core

@@ -42,6 +42,7 @@ For a more detailed explanation and some deep understanding:
 
 * [Preparing the environment](docs/preparation.md)
 * [Running the services](docs/running.md)
+* [Admin operations](docs/admin.md)
 
 ## Versions
 

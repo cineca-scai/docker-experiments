@@ -66,11 +66,6 @@ RUN mkdir copy && rsync -av /etc/irods/ copy/etcirods/
 # https://docs.irods.org/4.1.5/manual/installation/#resource-server
 
 ##########################################################################
-# Clone eudat repo
-# Should this go into another Image?
-#RUN git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
-
-##########################################################################
 # Closing operations
 ENV TERM xterm
 WORKDIR /home/$USER
