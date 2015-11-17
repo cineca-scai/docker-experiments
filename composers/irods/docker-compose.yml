@@ -16,12 +16,15 @@ sql:
 #################################
 # iRODS iCAT server
 icat:
-    image: cineca/icat
+    #image: cineca/icat
+    image: cineca/b2safe
     hostname: rodserver
     #command: sleep infinity
     volumes:
         - irodsconf:/etc/irods
         - irodshome:/home/irods
+        - eudathome:/opt/eudat
+        - irodsresc:/opt/irods_res
     links:
         - sql:db
 

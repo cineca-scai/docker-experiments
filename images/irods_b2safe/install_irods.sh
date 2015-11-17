@@ -3,6 +3,7 @@
 user=`whoami`
 p1="/home/$user"
 p2="/etc/$user"
+p3="/var/lib/$user"
 
 cd /tmp
 
@@ -29,6 +30,8 @@ echo "Configure & connect"
 MYDATA="/tmp/answers"
 ./expect_irods $MYDATA
 sudo /var/lib/irods/packaging/setup_irods.sh < $MYDATA
+echo "Fixing permissions again"
+sudo chown -R $UID:$GROUPS $p1 $p2 $p3
 
 #########################################################
 # Check if it works
@@ -38,5 +41,9 @@ yes $IRODS_PASS | ils 2> /dev/null
 if [ "$?" -ne 0 ]; then
     echo "Failed. Please check your internet connection!"
 else
+	if [ -f $EXTRA_INSTALLATION_SCRIPT ]; then
+		echo "Executing: extra configuration"
+		$EXTRA_INSTALLATION_SCRIPT
+	fi
     echo "Connected"
 fi

@@ -3,27 +3,36 @@ FROM cineca/icat
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 
 # ##########################################################################
-# Clean tmp 
 USER root
-RUN rm -rf /tmp/*
+ENV RESOURCES_DIR /opt/irods_res
+ENV MAINRES_DIR $RESOURCES_DIR/main
+ENV REPLICA_DIR $RESOURCES_DIR/replicas
+RUN mkdir -p $MAINRES_DIR $REPLICA_DIR \
+	&& chown -R $IRODS_USER:$IRODS_USER $RESOURCES_DIR
+ENV MAINRES myResc
+ENV REPLICARES replicaResc
+ENV HANDLECONF /myconfig
+RUN echo "# HANDLE CONFIGURATION" > $HANDLECONF
 
 # ##########################################################################
-ENV REPLICA_DIR /opt/REPLICAS
-RUN mkdir $REPLICA_DIR && \
-	/etc/init.d/irods start && \
-	iadmin mkresc replicaResc unixfilesystem $IRODS_HOST:$REPLICA_DIR
+# DON'T BECAUSE FUTURE INSTALLATION SCRIPT WAIT FOR FILES THERE TO WORK
+# # Clean tmp 
+# RUN rm -rf /tmp/*
+
+# ##########################################################################
+# Clone eudat repo
 USER $IRODS_USER
-
-# ##########################################################################
-# # Clone eudat repo
-
 RUN cd /tmp && git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
 WORKDIR /tmp/B2SAFE-core/packaging
 RUN ./create_deb_package.sh
 RUN yes $IRODS_PASS | sudo -S dpkg -i /home/$IRODS_USER/debbuild/irods*.deb
-WORKDIR /opt/eudat/b2safe/packaging  
-#RUN ./install.sh
 
 # ##########################################################################
-# Save resources
-VOLUME /opt
+# Prepare install script
+ADD myeudat.conf /opt/eudat/b2safe/packaging/myconf
+ADD install_eudat.sh $EXTRA_INSTALLATION_SCRIPT
+# Go home
+WORKDIR /home/$IRODS_USER
+
+# # Save resources and eudat configurations?
+# VOLUME /opt

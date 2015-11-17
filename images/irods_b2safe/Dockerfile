@@ -71,5 +71,6 @@ ENV TERM xterm
 WORKDIR /home/$IRODS_USER
 EXPOSE 1247
 ENV IRODS_HOST rodserver
-RUN yes $IRODS_PASS | sudo -S chown -R $IRODS_USER \
-	/etc/$IRODS_USER /var/lib/$IRODS_USER
+# if you need to add future commands after irods installation, 
+# use the following
+ENV EXTRA_INSTALLATION_SCRIPT /extras
