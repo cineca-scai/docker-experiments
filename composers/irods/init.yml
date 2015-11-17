@@ -17,6 +17,3 @@ icat:
     #command: sleep infinity
     volumes: 
      - ./confs/credentials.conf:/myconfig:ro
-
-## TODO
-# - no more mods to credentials (with git)
