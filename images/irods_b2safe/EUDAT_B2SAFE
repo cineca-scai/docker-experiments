@@ -2,7 +2,28 @@
 FROM cineca/icat
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 
-##########################################################################
-# Clone eudat repo
-# Should this go into another Image?
-#RUN git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
+# ##########################################################################
+# Clean tmp 
+USER root
+RUN rm -rf /tmp/*
+
+# ##########################################################################
+ENV REPLICA_DIR /opt/REPLICAS
+RUN mkdir $REPLICA_DIR && \
+	/etc/init.d/irods start && \
+	iadmin mkresc replicaResc unixfilesystem $IRODS_HOST:$REPLICA_DIR
+USER $IRODS_USER
+
+# ##########################################################################
+# # Clone eudat repo
+
+RUN cd /tmp && git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
+WORKDIR /tmp/B2SAFE-core/packaging
+RUN ./create_deb_package.sh
+RUN yes $IRODS_PASS | sudo -S dpkg -i /home/$IRODS_USER/debbuild/irods*.deb
+WORKDIR /opt/eudat/b2safe/packaging  
+#RUN ./install.sh
+
+# ##########################################################################
+# Save resources
+VOLUME /opt

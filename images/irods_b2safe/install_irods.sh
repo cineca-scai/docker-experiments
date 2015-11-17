@@ -21,8 +21,7 @@ sudo cp copy/etcirods/* $p2/
 # Note: using docker volumes, it requires a permission fix, until:
 #https://github.com/docker/docker/issues/7198
 echo "Fixing permissions"
-sudo chown -R $UID:$GROUPS $p1
-sudo chown -R $UID:$GROUPS $p2
+sudo chown -R $UID:$GROUPS $p1 $p2
 
 #########################################################
 # Connect server to DB and init

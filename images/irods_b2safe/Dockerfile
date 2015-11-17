@@ -68,5 +68,8 @@ RUN mkdir copy && rsync -av /etc/irods/ copy/etcirods/
 ##########################################################################
 # Closing operations
 ENV TERM xterm
-WORKDIR /home/$USER
+WORKDIR /home/$IRODS_USER
 EXPOSE 1247
+ENV IRODS_HOST rodserver
+RUN yes $IRODS_PASS | sudo -S chown -R $IRODS_USER \
+	/etc/$IRODS_USER /var/lib/$IRODS_USER
