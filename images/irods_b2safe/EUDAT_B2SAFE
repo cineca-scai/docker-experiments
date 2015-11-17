@@ -7,8 +7,8 @@ USER root
 ENV RESOURCES_DIR /opt/irods_res
 ENV MAINRES_DIR $RESOURCES_DIR/main
 ENV REPLICA_DIR $RESOURCES_DIR/replicas
-RUN mkdir -p $MAINRES_DIR $REPLICA_DIR \
-	&& chown -R $IRODS_USER:$IRODS_USER $RESOURCES_DIR
+# RUN mkdir -p $MAINRES_DIR $REPLICA_DIR \
+# 	&& chown -R $IRODS_USER:$IRODS_USER $RESOURCES_DIR
 ENV MAINRES myResc
 ENV REPLICARES replicaResc
 ENV HANDLECONF /myconfig
@@ -25,11 +25,14 @@ USER $IRODS_USER
 RUN cd /tmp && git clone https://github.com/EUDAT-B2SAFE/B2SAFE-core
 WORKDIR /tmp/B2SAFE-core/packaging
 RUN ./create_deb_package.sh
-RUN yes $IRODS_PASS | sudo -S dpkg -i /home/$IRODS_USER/debbuild/irods*.deb
+# Move from home dir, which will become a volume and clean everything
+RUN mv /home/$IRODS_USER/debbuild/irods* /tmp/
+# Inside the first time install script we must install the package
 
 # ##########################################################################
 # Prepare install script
-ADD myeudat.conf /opt/eudat/b2safe/packaging/myconf
+ENV EUDAT_CONFIGF /tmp/eudat.conf
+ADD myeudat.conf $EUDAT_CONFIGF
 ADD install_eudat.sh $EXTRA_INSTALLATION_SCRIPT
 # Go home
 WORKDIR /home/$IRODS_USER
