@@ -78,6 +78,8 @@ Enter your irods zone: tempZone
 Enter your current iRODS password: # the one above
 ```
 
+You can now go to [next chapter](client.md).
+
 *A security note*:
 
 The main password is saved as an environment variable for development purpose.
