@@ -71,6 +71,6 @@ ENV TERM xterm
 WORKDIR /home/$IRODS_USER
 EXPOSE 1247
 ENV IRODS_HOST rodserver
-# if you need to add future commands after irods installation, 
+# if you need to add future commands after irods installation,
 # use the following
 ENV EXTRA_INSTALLATION_SCRIPT /extras

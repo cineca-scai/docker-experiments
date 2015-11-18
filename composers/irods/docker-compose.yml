@@ -40,6 +40,21 @@ icat:
         - sql:db
 
 #################################
+# iRODS iCAT server for EUDAT B2safe
+iclient:
+    image: cineca/ipyclient
+    hostname: icl
+    command: sleep infinity
+    environment:
+        IRODS_USER: rods
+        IRODS_ZONE: tempZone
+    volumes:
+        - ./code:/code
+    working_dir: /code
+    links:
+        - icat:rodserver
+
+#################################
 
 # $ docker-compose -f docker-compose.yml -f init.yml up -d
 ## wait the operations and then press CTRL-c

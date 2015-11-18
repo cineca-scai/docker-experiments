@@ -1,5 +1,5 @@
 
-# iRODS server + REST API
+# iRODS server for developing REST API
 
 This is an attempt to have a multi-container micro-services environment
 to simulate some REST API service on top of an iCAT iRODS server.
@@ -24,7 +24,7 @@ git clone https://github.com/cineca-scai/docker-experiments.git
 # Go into this directory
 cd composers/irods
 # Init services
-docker-compose -f docker-compose.yml -f init.yml up
+docker-compose -f docker-compose.yml -f init.yml up icat
 # When completed press CTRL-c
 # Check volumes for persistence
 docker volume ls
@@ -32,8 +32,15 @@ docker volume ls
 ##local               sqldata
 ##local               irodsconf
 ##local               irodshome
+##local               irodsresc
+##local               eudathome
+
 # ...and run the final services
-docker-compose up
+docker-compose up -d iclient
+docker exec -it irods_iclient_1 bash
+root@icl:/code#
+
+# Develop from here
 ```
 
 ## Documentation
@@ -42,6 +49,7 @@ For a more detailed explanation and some deep understanding:
 
 * [Preparing the environment](docs/preparation.md)
 * [Running the services](docs/running.md)
+* [Developing](docs/client.md)
 * [Admin operations](docs/admin.md)
 
 ## Versions
