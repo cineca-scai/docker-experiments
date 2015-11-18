@@ -25,6 +25,11 @@ icat:
     # B2safe instance on irods
     image: cineca/b2safe
 
+    # # Open irods port to Outside world
+    # ## CAREFULL: don't uncomment the two lines below if you don't know why
+    # ports:
+    #     - 1247:1247
+
     hostname: rodserver
     volumes:
         - irodsconf:/etc/irods
