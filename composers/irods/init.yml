@@ -14,6 +14,6 @@ sql:
 
 icat:
     command: /install
-    #command: sleep infinity
-    volumes: 
+    #command: sleep infinity    ## DEBUG
+    volumes:
      - ./confs/credentials.conf:/myconfig:ro

@@ -14,15 +14,23 @@ sql:
         POSTGRES_DB: ICAT
 
 #################################
-# iRODS iCAT server
+# iRODS iCAT server for EUDAT B2safe
 icat:
+
+    # # Simple irods server
+    # image: cineca/icat
+
+    ## OR
+
+    # B2safe instance on irods
     image: cineca/b2safe
+
     hostname: rodserver
     volumes:
         - irodsconf:/etc/irods
         - irodshome:/home/irods
-        - eudathome:/opt/eudat
         - irodsresc:/opt/irods_res
+        - eudathome:/opt/eudat
     links:
         - sql:db
 

@@ -5,22 +5,23 @@ These operations are needed only the first time you run the containers.
 
 ### Data persistence
 
-Since Docker 1.9 you may create volumes with specific names (and drivers) to save data to persist (e.g. libs/data for your Database, or configurations for your server).
+Containers do not store modifications once started.
 
-Our environment requires two volumes.
-You may create them before using containers (this is not required) with the commands:
-```bash
-$ docker volume create --name sqldata
-$ docker volume create --name irodsdata
-```
+There are many ways to achieve persistence; the most common patterns are: mounting an external directory or either using the **datacontainer** pattern. But we will not use them.
 
-Check their existence:
+Since Docker 1.9 (the most recent at the time of writing) you may create volumes with specific names (and drivers) to save data to persist (e.g. libs/data for your Database, or configurations for your server).
+
+Our environment will require different volumes with specific names. **Docker compose** let you specify the name inside the YAML file,
+they will be automatically created.
+
+To check your current existing volumes:
 ```bash
 $ docker volume ls
 DRIVER              VOLUME NAME
-local               sqldata
-local               irodsdata
+local               thisismyvolume
 ```
+
+We will talk about our volumes again at the end of this chapter.
 
 ### Database
 
@@ -32,7 +33,8 @@ docker-compose -f docker-compose.yml -f init.yml up -d sql
 ```
 
 The above operation needs 5/10 seconds to boost.
-If you want to verify, compose let you check logs of running containers, so in this case:
+If you want to verify what is happening,
+compose let you check logs of running containers. E.g.:
 ```bash
 docker-compose logs sql
 # press CTRL-c when you see everything is configured
@@ -41,12 +43,27 @@ docker-compose logs sql
 
 ### iRODS configuration
 
-iRODS server image is ready to be installed and configured, linking to an existing database.
+iRODS server image is ready to be installed and configured,
+but needs to be linked to an existing database.
 
-If you created the database and username inside the previous paragraph, you are ready to enable this service with the command:
+Before launching the next installation script,
+you should provide your EPIC Handle credentials inside the file
+`confs/credentials.conf`: needed for enabling the
+**Persistent IDentifier (PID)** onto your instance.
+
+Please provide the following variables:
+
+`
+HANDLE_BASE=""      # epic base url
+HANDLE_USER=""      # your username for previous url
+HANDLE_PREFIX=""    # prefix for base url
+HANDLE_PASS=""      # password for previous user
+`
+
+Once you modified that file, if you created the database and username inside the previous paragraph, you are ready to create your instance of this service with the command:
 ```bash
 docker-compose -f docker-compose.yml -f init.yml up icat
-# we don't leave this operation in background
+# note: we don't leave this operation in background
 # it will say "Connected" when everything has gone fine
 # [...]
 icat_1 | Connected
@@ -54,7 +71,26 @@ irods_icat_1 exited with code 0
 # Press CTRL-c
 ```
 
-*Warning*: In case you have DB problems and you really need to debug the connection from the icat container to the postgres db you could try with:
+If you completed this step with no errors, you may already proceed to the
+[next chapter](running.md).
+
+### Your volumes
+
+Now that you have prepared the services, you should also have all the docker volumes in place:
+
+```bash
+$ docker volume ls
+DRIVER              VOLUME NAME
+local               sqldata
+local               irodshome
+local               irodsconf
+local               irodsresc
+local               eudathome
+```
+
+### Debugging database link
+
+In case you have DB problems and you really need to debug the connection from the icat container to the postgres db you could try with:
 ```bash
 $ docker-compose up -d
 $ docker exec -it irods_icat_1 bash
@@ -66,3 +102,5 @@ ICAT=#
 # if you arrive here, database linking is fine.
 # do some other database checks
 ```
+
+Also referr to the [admin chapter](admin.md) to access the database with a web interface.
