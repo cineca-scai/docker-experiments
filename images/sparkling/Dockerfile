@@ -140,12 +140,15 @@ ADD boot-all.sh /usr/bin/booter
 CMD ["booter"]
 
 ###############################
+# Environment variables
 ADD env.sh /tmp/env.sh
 RUN echo ". /tmp/env.sh" >> /home/$NB_USER/.bashrc
+USER root
+
+###############################
+# mrjob fix
+ADD mrjob.conf /etc/mrjob.conf
+WORKDIR /data
 
 ###############################
 # The end
-USER root
-WORKDIR /data
-
-# https://github.com/sequenceiq/docker-hadoop-ubuntu/blob/master/Dockerfile
