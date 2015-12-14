@@ -90,21 +90,23 @@ RUN echo "UsePAM no" >> /etc/ssh/sshd_config
 RUN echo "Port 2122" >> /etc/ssh/sshd_config
 
 # HDFS with spark libs
+ENV PATH $PATH:$HADOOP_PREFIX/bin
 RUN service ssh start \
     && $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh \
     && $HADOOP_PREFIX/sbin/start-dfs.sh \
-    && $HADOOP_PREFIX/bin/hdfs dfs -mkdir -p /user/root \
-    && $HADOOP_PREFIX/bin/hdfs dfs -put $HADOOP_PREFIX/etc/hadoop/ input \
-    # && $HADOOP_PREFIX/bin/hdfs dfsadmin -safemode leave \
-    && $HADOOP_PREFIX/bin/hdfs dfs -put $SPARK_HOME/lib /spark
-
-ENV PATH $PATH:$HADOOP_PREFIX/bin
+    && hdfs dfs -mkdir -p /user/root \
+    && hdfs dfs -put $HADOOP_PREFIX/etc/hadoop/ input \
+    && hdfs dfs -put $SPARK_HOME/lib /spark \
+    && hadoop fs -mkdir -p /tmp \
+    && hadoop fs -chown -R $NB_USER:$NB_USER /tmp \
+    && hadoop fs -mkdir -p /user/$NB_USER \
+    && hadoop fs -chown -R $NB_USER:$NB_USER /user/$NB_USER
 
 ##########################################################################
 # JUPYTER RELATED
 
 # Dependencies
-RUN apt-get install -y libyaml-dev
+RUN apt-get install -y libyaml-dev vim
 RUN chown jovyan /opt
 # Main notebook user
 USER jovyan
@@ -136,6 +138,10 @@ RUN wget -q https://github.com/pdonorio/RISE/archive/master.tar.gz \
 # New bootstrap?
 ADD boot-all.sh /usr/bin/booter
 CMD ["booter"]
+
+###############################
+ADD env.sh /tmp/env.sh
+RUN echo ". /tmp/env.sh" >> /home/$NB_USER/.bashrc
 
 ###############################
 # The end
