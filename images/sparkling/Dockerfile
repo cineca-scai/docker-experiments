@@ -12,10 +12,9 @@ USER root
 # install dev tools
 RUN apt-get update && apt-get upgrade -y && apt-get update && \
     apt-get install -y \
-        # ca-certificates \
-        # AXEL is the download accelerator
         axel curl tar sudo openssh-server openssh-client rsync \
-        openjdk-7-jdk
+        openjdk-7-jdk libyaml-dev \
+        && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # hadoop
 ENV APACHE http://www.eu.apache.org
@@ -106,7 +105,6 @@ RUN service ssh start \
 # JUPYTER RELATED
 
 # Dependencies
-RUN apt-get install -y libyaml-dev vim
 RUN chown jovyan /opt
 # Main notebook user
 USER jovyan
@@ -131,8 +129,7 @@ RUN wget -q https://github.com/mathjax/MathJax/archive/2.5.3.zip \
 # Live slideshows
 RUN wget -q https://github.com/pdonorio/RISE/archive/master.tar.gz \
     && tar xvzf *.gz && cd *master && \
-    python setup.py install \
-    && rm -rf /tmp/*.gz
+    python setup.py install && rm -rf *.gz
 
 ###############################
 # New bootstrap?
