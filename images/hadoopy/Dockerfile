@@ -3,7 +3,8 @@
 # Spark and python friends
 
 #FROM jupyter/all-spark-notebook
-FROM jupyter/datascience-notebook
+#FROM jupyter/datascience-notebook
+FROM cineca/nbscience
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 
 ##########################################################################
