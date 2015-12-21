@@ -49,10 +49,20 @@ iclient:
         IRODS_USER: rods
         IRODS_ZONE: tempZone
     volumes:
+        - irodsrestlitedb:/dbs
         - ./code:/code
     working_dir: /code
     links:
         - icat:rodserver
+
+#################################
+
+##NOTES
+
+# May use sqlacodegen to get the sqlalchemy models from irods postegres db
+# http://stackoverflow.com/a/23786811
+# In this way we may easily admin the irods users with flask-admin?
+# Also use flask-security to use irods to get login?
 
 #################################
 
