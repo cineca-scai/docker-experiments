@@ -8,15 +8,11 @@ iRODS reference
 import os
 import irods
 from irods.session import iRODSSession
-from restapi import get_logger
-
-
-# PRINT ALL LOGGERS? CAN YOU DO IT?
-# import logging
-# irods_original_logger = logging.getLogger('.irods')
-# irods_original_logger.setLevel(logging.WARNING)
+from restapi import get_logger, silence_loggers
 
 logger = get_logger(__name__)
+# Silence the irods debugger which add a useless handler
+silence_loggers()
 
 
 #####################################

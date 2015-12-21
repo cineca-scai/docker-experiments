@@ -26,12 +26,13 @@ logger = get_logger(__name__)
 
 
 #####################################
-class JustATest(ExtendedApiResource):
+class PidHandle(ExtendedApiResource):
 
     @decorate.apimethod
     def get(self):
+        """ Get pid """
         logger.warning("irods call %s", mirods.other())
         logger.warning("graph call %s", migraph.other())
         query = "MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r"
         migraph.cipher(query)
-        return self.response('Hello world!')
+        return self.response('Hello PID!')
