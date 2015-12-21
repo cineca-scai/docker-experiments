@@ -1,0 +1,15 @@
+
+first steps:
+
+  ☐ clone (graph) code inside icat server too
+    ☐ copy models inside module
+  ☐ script to push data
+    ☐ args: DATAOBJ PID [METADATA]
+    ☐ test icat irule with epic handle?
+    ☐ manually insert dataobj + pid with irule
+  ☐ api: search pid via graphdb models
+
+REST authentication:
+
+  ☐ is not @pluggable
+    ☐ how can we make it so?
