@@ -4,8 +4,15 @@ MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 
 #######################
 # Dependencies
-RUN apt-get update
-RUN apt-get install -y \
+
+############################################
+# Bug fix?
+RUN apt-get update && apt-get install -y \
+    linux-libc-dev
+# Bug fix?
+############################################
+
+RUN apt-get update && apt-get install -y \
     wget git vim \
     python python-psutil python-requests python-jsonschema \
     python-setuptools python-dev build-essential \
