@@ -9,8 +9,8 @@ RUN apt-get install -y \
     wget git vim \
     python python-psutil python-requests python-jsonschema \
     python-setuptools python-dev build-essential \
-    libxml2-dev libxslt1-dev libz-dev
-    #&& apt-get clean && rm -rf /var/lib/apt/lists/* /var/tmp/*
+    libxml2-dev libxslt1-dev libz-dev \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /var/tmp/*
 
 WORKDIR /tmp
 RUN easy_install pip
@@ -18,9 +18,10 @@ RUN easy_install pip
 #######################
 # Python libraries
 RUN pip install --upgrade pip \
-    simplejson httplib2 defusedxml lxml queuelib dweepy \
+    simplejson httplib2 requests defusedxml lxml queuelib dweepy \
     py2neo neomodel \
-    flask-security flask-restful flask-restplus flask-sqlalchemy \
+    flask-sqlalchemy flask-security flask-restful \
+    flask-admin flask-restplus flask-cors \
     git+git://github.com/irods/python-irodsclient.git
 
 # Icommands?
