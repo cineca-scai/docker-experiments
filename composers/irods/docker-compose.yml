@@ -40,14 +40,27 @@ icat:
         - sql:db
 
 #################################
+# GRAPHdb neo4j
+igraph:
+    image: neo4j/neo4j
+    #command: sleep infinity
+    hostname: ig
+    environment:
+        NEO4J_AUTH: neo4j/eudat
+
+#################################
 # iRODS iCAT server for EUDAT B2safe
 iclient:
     image: cineca/ipyclient
-    hostname: icl
-    command: sleep infinity
+    hostname: api
+    #command: sleep infinity
+    command: python run.py --debug
     environment:
         IRODS_USER: rods
         IRODS_ZONE: tempZone
+    ports:
+        - 80:5000
+    working_dir: /code/rest-mock
     volumes:
         # Sql lite database
         - irodsrestlitedb:/dbs
@@ -57,9 +70,9 @@ iclient:
         - ./vanilla/apis:/code/rest-mock/restapi/resources/custom
         # Rest API configuration
         - ./vanilla/specs/endpoints.ini:/code/rest-mock/confs/endpoints.ini
-    working_dir: /code
     links:
         - icat:rodserver
+        - igraph:gdb
 
 #################################
 
