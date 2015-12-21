@@ -44,17 +44,21 @@ icat:
 igraph:
     image: neo4j/neo4j
     #command: sleep infinity
-    hostname: ig
+    hostname: gdb
     environment:
         NEO4J_AUTH: neo4j/eudat
+    # volumes:
+    #     - ./confs/neo4j:/conf
+    ports:
+        - 8000:7474
 
 #################################
 # iRODS iCAT server for EUDAT B2safe
 iclient:
     image: cineca/ipyclient
     hostname: api
-    #command: sleep infinity
-    command: python run.py --debug
+    command: sleep infinity
+    #command: python run.py --debug
     environment:
         IRODS_USER: rods
         IRODS_ZONE: tempZone
