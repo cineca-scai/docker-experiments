@@ -49,8 +49,14 @@ iclient:
         IRODS_USER: rods
         IRODS_ZONE: tempZone
     volumes:
+        # Sql lite database
         - irodsrestlitedb:/dbs
+        # Base code
         - ./code:/code
+        # Rest API endpoints
+        - ./vanilla/apis:/code/rest-mock/restapi/resources/custom
+        # Rest API configuration
+        - ./vanilla/specs/endpoints.ini:/code/rest-mock/confs/endpoints.ini
     working_dir: /code
     links:
         - icat:rodserver
