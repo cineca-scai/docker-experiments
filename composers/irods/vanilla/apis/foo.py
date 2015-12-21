@@ -5,6 +5,7 @@
 An endpoint example
 """
 
+import os
 import irods
 from irods.session import iRODSSession
 from restapi import get_logger
@@ -14,12 +15,13 @@ from .. import decorators as decorate
 # from flask.ext.security import roles_required, auth_token_required
 
 
-# PRINT ALL LOGGERS? CAN YOU DO IT?
+# PRINT ALL LOGGERS? CAN YOU DO IT?
 # import logging
 # irods_original_logger = logging.getLogger('.irods')
 # irods_original_logger.setLevel(logging.WARNING)
 
 logger = get_logger(__name__)
+
 
 #####################################
 # IRODS CLASS
@@ -33,7 +35,6 @@ class MyRods(object):
         super(MyRods, self).__init__()
 
         # config
-        import os
         self._default_zone = os.environ['IRODS_ZONE']
         iconnection = {
             'host': os.environ['RODSERVER_ENV_IRODS_HOST'],
@@ -64,7 +65,53 @@ class MyRods(object):
         for obj in coll.data_objects:
             logger.debug("Data obj %s" % obj)
 
+        return self
+
 mirods = MyRods()
+
+
+#####################################
+# GRAPH DB
+
+# Parameters
+protocol = 'http'
+host = 'gdb'
+port = '7474'
+user = 'neo4j'
+pw = 'eudat'
+# Connection http descriptor
+GRAPHDB_LINK = \
+    protocol + "://" + user + ":" + pw + "@" + host + ":" + port + "/db/data"
+
+
+class MyGraph(object):
+    """" A graph db neo4j instance """
+    def __init__(self):
+        super(MyGraph, self).__init__()
+        try:
+            os.environ["NEO4J_REST_URL"] = GRAPHDB_LINK
+            logger.info("Graph is connected")
+        except:
+            raise EnvironmentError("Missing REST url configuration for graph")
+        # Set debug for cipher queries
+        os.environ["NEOMODEL_CYPHER_DEBUG"] = "1"
+
+    def cipher(self, query):
+        """ Execute normal neo4j queries """
+        from neomodel import db
+        try:
+            results, meta = db.cypher_query(query)
+        except Exception as e:
+            raise BaseException(
+                "Failed to execute Cipher Query: %s\n%s" % (query, str(e)))
+            return False
+        logger.debug("Graph query. Res: %s" % results)
+        return results
+
+    def other(self):
+        return self
+
+migraph = MyGraph()
 
 
 #####################################
@@ -72,6 +119,8 @@ class JustATest(ExtendedApiResource):
 
     @decorate.apimethod
     def get(self):
-        logger.warning("a call")
-        mirods.other()
+        logger.warning("irods call %s", mirods.other())
+        logger.warning("graph call %s", migraph.other())
+        query = "MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r"
+        migraph.cipher(query)
         return self.response('Hello world!')
