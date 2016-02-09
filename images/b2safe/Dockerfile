@@ -16,13 +16,12 @@ RUN echo "# HANDLE CONFIGURATION" > $HANDLECONF
 
 # ##########################################################################
 # DON'T BECAUSE FUTURE INSTALLATION SCRIPT WAIT FOR FILES THERE TO WORK
-# # Clean tmp 
+# # Clean tmp
 # RUN rm -rf /tmp/*
 
 # ##########################################################################
 # Install dependencies for EUDAT python scripts
-RUN apt-get update \
-	&& apt-get install -y \
+RUN apt-get update && apt-get install -y \
 	python-setuptools python-dev build-essential \
 	libxml2-dev libxslt1-dev libz-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /var/tmp/* \
