@@ -1,3 +1,4 @@
+
 ##########################################################################
 FROM ubuntu:15.10
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
@@ -7,8 +8,8 @@ MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 
 ############################################
 # Bug fix?
-RUN apt-get update && apt-get install -y \
-    linux-libc-dev
+# RUN apt-get update && apt-get install -y \
+#     linux-libc-dev
 # Bug fix?
 ############################################
 
@@ -25,7 +26,7 @@ RUN easy_install pip
 #######################
 # Python libraries
 RUN pip install --upgrade pip \
-    simplejson httplib2 requests defusedxml lxml queuelib dweepy \
+    simplejson commentjson httplib2 requests defusedxml lxml queuelib dweepy \
     py2neo neomodel \
     flask-sqlalchemy flask-security flask-restful \
     flask-admin flask-restplus flask-cors \
