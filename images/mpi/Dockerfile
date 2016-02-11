@@ -8,6 +8,8 @@ USER root
 RUN apt-get update && apt-get install -yq --no-install-recommends \
     openmpi-bin openmpi-common \
     liblapack-dev libblas-dev \
+    # INSTALL VIA PACKAGES INSTEAD OF PIP/CONDA \
+    python-mpi4py \
     && apt-get clean
 
 RUN mkdir /data && chown jovyan /data
@@ -15,7 +17,9 @@ RUN mkdir /data && chown jovyan /data
 # Python packages
 USER jovyan
 RUN conda install --yes \
-    numpy scipy pandas matplotlib seaborn mpi4py \
+    numpy scipy pandas matplotlib seaborn \
+    # mpi4py \
+    # USE APT INSTEAD \
     && conda clean -yt
 
 # RISE
