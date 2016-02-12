@@ -6,10 +6,8 @@ MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@gmail.com>"
 # Libraries
 USER root
 RUN apt-get update && apt-get install -yq --no-install-recommends \
-    openmpi-bin openmpi-common \
+    openmpi-bin openmpi-common openssh-client \
     liblapack-dev libblas-dev \
-    # INSTALL VIA PACKAGES INSTEAD OF PIP/CONDA \
-    python-mpi4py \
     && apt-get clean
 
 RUN mkdir /data && chown jovyan /data
@@ -18,8 +16,7 @@ RUN mkdir /data && chown jovyan /data
 USER jovyan
 RUN conda install --yes \
     numpy scipy pandas matplotlib seaborn \
-    # mpi4py \
-    # USE APT INSTEAD \
+    mpi4py \
     && conda clean -yt
 
 # RISE
