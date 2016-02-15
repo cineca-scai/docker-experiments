@@ -3,16 +3,6 @@
 FROM ubuntu:15.10
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 
-#######################
-# Dependencies
-
-############################################
-# Bug fix?
-# RUN apt-get update && apt-get install -y \
-#     linux-libc-dev
-# Bug fix?
-############################################
-
 RUN apt-get update && apt-get install -y \
     wget git vim \
     python python-psutil python-requests python-jsonschema \
@@ -22,6 +12,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /tmp
 RUN easy_install pip
+
+#ftp://ftp.renci.org/pub/irods/releases/4.1.7/ubuntu14/irods-icommands-4.1.7-ubuntu14-x86_64.deb
 
 #######################
 # Python libraries
