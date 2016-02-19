@@ -8,6 +8,11 @@ sudo rm -rf /tmp/*
 sudo chown $UID:$GROUPS -R /var/lib/irods
 # Start irods
 sudo /etc/init.d/irods start
-echo "iRODS online"
-# Go to sleep
-sleep infinity
+if [ "$?" == "0" ]; then
+    echo "iRODS online"
+    # Leave a process open to let the container stay awake
+    sleep infinity
+else
+    echo "Error launching irods..."
+    exit 1
+fi
