@@ -30,6 +30,13 @@ echo "Configure & connect"
 MYDATA="/tmp/answers"
 ./expect_irods $MYDATA
 sudo /var/lib/irods/packaging/setup_irods.sh < $MYDATA
+if [ "$?" == "0" ]; then
+    echo ""
+    echo "iRODS INSTALLED!"
+else
+    echo "Failed to install irods..."
+    exit 1
+fi
 echo "Fixing permissions again"
 sudo chown -R $UID:$GROUPS $p1 $p2 $p3
 
