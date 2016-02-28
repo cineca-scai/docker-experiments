@@ -41,6 +41,15 @@ echo "Fixing permissions again"
 sudo chown -R $UID:$GROUPS $p1 $p2 $p3
 
 #########################################################
+# Install plugins
+
+# This plugin requires db already initialized and connected.
+# For this reason it cannot be used at image building
+sudo -S dpkg -i $IRODSGSI_DEB
+rm $IRODSGSI_DEB
+echo "Installed GSI"
+
+#########################################################
 # Check if it works
 sleep 5
 echo "Testing"

@@ -18,16 +18,22 @@ RUN apt-get update && apt-get install -y \
     lsof sudo libfuse2 libjson-perl \
     unixodbc odbc-postgresql postgresql-client super \
     python python-psutil python-requests python-jsonschema \
+    libglobus-gssapi-gsi4 libglobus-gss-assist3 \
     && apt-get clean
 
 ##########################################################################
 # IRODS icat server
 # install instructions: https://docs.irods.org/4.1.5/manual/installation
 WORKDIR /tmp
-ENV IRODSVERSION 4.1.7
-ENV IRODSFTP "ftp://ftp.renci.org/pub/irods/releases/$IRODSVERSION/ubuntu14"
-RUN wget -q $IRODSFTP/irods-icat-${IRODSVERSION}-ubuntu14-x86_64.deb
-RUN wget -q $IRODSFTP/irods-database-plugin-postgres-1.7-ubuntu14-x86_64.deb
+ENV IRODSVERSION 4.1.8
+ENV IRODSFTP "ftp://ftp.renci.org/pub/irods"
+ENV IRODSRELEASES "$IRODSFTP/releases/$IRODSVERSION/ubuntu14"
+RUN wget -q $IRODSRELEASES/irods-icat-${IRODSVERSION}-ubuntu14-x86_64.deb
+RUN wget -q $IRODSRELEASES/irods-database-plugin-postgres-1.8-ubuntu14-x86_64.deb
+ENV IRODSGSI "$IRODSFTP/plugins/irods_auth_plugin_gsi/1.2"
+ENV IRODSGSI_DEB /opt/gsi.deb
+RUN wget -q $IRODSGSI/irods-auth-plugin-gsi-1.2-ubuntu14-x86_64.deb -O $IRODSGSI_DEB
+
 
 ##########################################################################
 # install scripts
