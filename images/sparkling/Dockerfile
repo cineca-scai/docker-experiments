@@ -12,7 +12,8 @@ USER root
 # install dev tools
 RUN apt-get update && apt-get upgrade -y && apt-get update && \
     apt-get install -y \
-        axel curl tar sudo openssh-server openssh-client rsync \
+        wget axel curl \
+        tar sudo openssh-server openssh-client rsync \
         openjdk-7-jdk libyaml-dev \
         && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -118,12 +119,15 @@ WORKDIR /opt
 RUN git clone https://github.com/Yelp/mrjob \
     && cd mrjob && pip install -e .
 
-###############################
-# Add offline use of mathjax
-RUN wget -q https://github.com/mathjax/MathJax/archive/2.5.3.zip \
-    && python -m IPython.external.mathjax 2.5.3.zip \
-    && rm *.zip
-# RUN python3 -m IPython.external.mathjax
+# ###############################
+# Note:
+# IPython.external.mathjax is deprecated, Mathjax is now installed by default with the notebook package
+
+# # Add offline use of mathjax
+# RUN wget -q https://github.com/mathjax/MathJax/archive/2.5.3.zip \
+#     && python -m IPython.external.mathjax 2.5.3.zip \
+#     && rm *.zip
+# # RUN python3 -m IPython.external.mathjax
 
 ###############################
 # Live slideshows

@@ -1,9 +1,25 @@
 #!/bin/bash
 
 dir="/data"
+
+# Project
 project="lectures"
+# Basic branch
 branch="massive-analysis"
+# Basic path
 nbpath="ttmda"
+
+# If passed through environment
+if [ -n "$LECTURE_BRANCH" ]; then
+    branch="$LECTURE_BRANCH"
+    if [ -n "$LECTURE_PATH" ]; then
+        nbpath="$LECTURE_PATH"
+    fi
+fi
+
+echo "************************"
+echo "** LECTURES"
+echo "Using: branch[$branch] path[$nbpath]"
 
 cd $dir
 
@@ -16,7 +32,7 @@ fi
 cd $project
 git checkout $branch
 git pull origin $branch
-chown -R $NB_UID /data
+chown -R $NB_UID /data 2> /dev/null
 echo "Done repository init"
 
 cd $nbpath
