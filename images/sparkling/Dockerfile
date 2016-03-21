@@ -66,15 +66,15 @@ RUN chmod +x /usr/local/hadoop/etc/hadoop/*-env.sh
 RUN $HADOOP_PREFIX/bin/hdfs namenode -format
 
 ###########################################
-# Spark
-ENV SPARK_VERSION spark-1.5.2
-ENV SPARK_HADOOP_VERSION hadoop2.6
-ENV SPARK_BIN "$SPARK_VERSION-bin-$SPARK_HADOOP_VERSION"
-ENV SPARK_URL "$APACHE/dist/spark/$SPARK_VERSION/$SPARK_BIN.tgz"
-RUN axel -a -n 16 $SPARK_URL \
-    && tar xvzf $SPARK_BIN.tgz -C /usr/local/ \
-    && rm *.tgz && cd /usr/local && ln -s $SPARK_BIN spark
-ENV SPARK_HOME /usr/local/spark
+# # Spark
+# ENV SPARK_VERSION spark-1.5.2
+# ENV SPARK_HADOOP_VERSION hadoop2.6
+# ENV SPARK_BIN "$SPARK_VERSION-bin-$SPARK_HADOOP_VERSION"
+# ENV SPARK_URL "$APACHE/dist/spark/$SPARK_VERSION/$SPARK_BIN.tgz"
+# RUN axel -a -n 16 $SPARK_URL \
+#     && tar xvzf $SPARK_BIN.tgz -C /usr/local/ \
+#     && rm *.tgz && cd /usr/local && ln -s $SPARK_BIN spark
+# ENV SPARK_HOME /usr/local/spark
 
 # hadoop bootstrap
 ADD bootstrap.sh /etc/bootstrap.sh
@@ -96,7 +96,7 @@ RUN service ssh start \
     && $HADOOP_PREFIX/sbin/start-dfs.sh \
     && hdfs dfs -mkdir -p /user/root \
     && hdfs dfs -put $HADOOP_PREFIX/etc/hadoop/ input \
-    && hdfs dfs -put $SPARK_HOME/lib /spark \
+    # && hdfs dfs -put $SPARK_HOME/lib /spark \
     && hadoop fs -mkdir -p /tmp \
     && hadoop fs -chown -R $NB_USER:$NB_USER /tmp \
     && hadoop fs -mkdir -p /user/$NB_USER \
@@ -110,7 +110,7 @@ RUN chown jovyan /opt
 # Main notebook user
 USER jovyan
 # install libs
-RUN pip install plumbum jinja2
+RUN pip install plumbum jinja2 tweepy
 
 ###############################
 # Add mrjob from Yelp
@@ -150,6 +150,11 @@ USER root
 # mrjob fix
 ADD mrjob.conf /etc/mrjob.conf
 WORKDIR /data
+
+###############################
+# Extra spark libs
+COPY jars/*.jar /usr/local/spark/extensions/
+COPY jars/spark-defaults.conf /usr/local/spark/conf/
 
 ###############################
 # The end
