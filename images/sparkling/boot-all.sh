@@ -8,25 +8,38 @@ project="lectures"
 branch="massive-analysis"
 # Basic path
 nbpath="ttmda"
+# Basic repo
+repo="github.com/cineca-scai"
 
-# If passed through environment
+
+
+# If passed through environment
 if [ -n "$LECTURE_BRANCH" ]; then
-    branch="$LECTURE_BRANCH"
-    if [ -n "$LECTURE_PATH" ]; then
-        nbpath="$LECTURE_PATH"
-    fi
+	branch="$LECTURE_BRANCH"
+fi
+
+if [ -n "$LECTURE_PATH" ]; then
+	nbpath="$LECTURE_PATH"
+fi
+
+if [ -n "$LECTURE_REPO" ]; then
+        repo="$LECTURE_REPO"
+fi
+
+if [ -n "$LECTURE_PRJ" ]; then
+        project="$LECTURE_PRJ"
 fi
 
 echo "************************"
 echo "** LECTURES"
-echo "Using: branch[$branch] path[$nbpath]"
+echo "Using: branch[$branch] path[$nbpath] repo[$repo] project[$project]"
 
 cd $dir
 
 if [ -d $project ]; then
     echo "Repository already found"
 else
-    git clone https://github.com/cineca-scai/lectures.git
+    git -c http.sslVerify=false clone https://${repo}/${project}.git
 fi
 
 cd $project
