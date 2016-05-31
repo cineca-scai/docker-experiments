@@ -1,6 +1,7 @@
 
 ##########################################################################
-# Spark and python friends
+# Spark and python friends
+# Last changes: 31st May, 2016
 
 FROM jupyter/all-spark-notebook
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
