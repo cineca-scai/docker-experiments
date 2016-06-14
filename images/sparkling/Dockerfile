@@ -108,16 +108,16 @@ RUN service ssh start \
 
 # Dependencies
 RUN chown jovyan /opt
-# Main notebook user
+# Main notebook user
 USER jovyan
-# install libs
+# install libs
+RUN pip install --upgrade pip
 RUN pip install plumbum jinja2 tweepy
 RUN pip install version_information
 
 
 # Update anaconda
-RUN conda update --all -y
-RUN conda clean -yt
+RUN conda remove backports_abc -y && conda update python=3.5 -y && conda update --all -y && conda clean -yt
 
 
 
