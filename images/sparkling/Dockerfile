@@ -117,7 +117,8 @@ RUN pip install version_information
 
 
 # Update anaconda
-RUN conda remove backports_abc -y && conda update python=3.5 -y && conda update --all -y && conda clean -yt
+RUN conda remove backports_abc -y 
+RUN conda install python=3.5 -y && conda update --all -y && conda clean -yt
 
 
 
