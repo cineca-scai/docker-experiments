@@ -1,7 +1,7 @@
 
 ##########################################################################
 # Spark and python friends
-# Last changes: 31st May, 2016
+# Last changes: 14th June, 2016
 
 FROM jupyter/all-spark-notebook
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
@@ -112,6 +112,14 @@ RUN chown jovyan /opt
 USER jovyan
 # install libs
 RUN pip install plumbum jinja2 tweepy
+RUN pip install version_information
+
+
+# Update anaconda
+RUN conda update --all -y
+RUN conda clean -yt
+
+
 
 ###############################
 # Add mrjob from Yelp
