@@ -112,15 +112,13 @@ RUN chown jovyan /opt
 USER jovyan
 # install libs
 RUN pip install --upgrade pip
-RUN pip install plumbum jinja2 tweepy
-RUN pip install version_information
+RUN pip install plumbum jinja2 tweepy version_information
 
 
 # Update anaconda
-RUN conda remove backports_abc -y 
-RUN conda install python=3.5 -y && conda update --all -y && conda clean -yt
-
-
+# RUN conda remove backports_abc -y 
+RUN conda install python=3.5 -y \
+    && conda update --all -y && conda clean -yt
 
 ###############################
 # Add mrjob from Yelp
