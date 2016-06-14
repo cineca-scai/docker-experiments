@@ -117,8 +117,10 @@ RUN pip install plumbum jinja2 tweepy version_information
 
 # Update anaconda
 # RUN conda remove backports_abc -y 
-RUN conda install python=3.5 -y \
-    && conda update --all -y && conda clean -yt
+# RUN conda update --all -y
+# RUN conda remove backports_abc -y
+# RUN conda install python=3.5 -y
+# RUN conda clean -yt 
 
 ###############################
 # Add mrjob from Yelp
