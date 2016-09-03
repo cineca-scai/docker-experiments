@@ -1,5 +1,6 @@
+
 ##########################################################################
-FROM ubuntu:15.10
+FROM ubuntu:16.04
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 
 ##########################################################################
@@ -25,14 +26,19 @@ RUN apt-get update && apt-get install -y \
 # IRODS icat server
 # install instructions: https://docs.irods.org/4.1.5/manual/installation
 WORKDIR /tmp
-ENV IRODSVERSION 4.1.8
+ENV IRODS4VERSION 1.9
+ENV IRODSVERSION 4.$IRODS4VERSION
+# note: there is no releases for ubuntu 16 at the moment...?
+ENV OSVERSION ubuntu14
+# ENV OSVERSION ubuntu16
 ENV IRODSFTP "ftp://ftp.renci.org/pub/irods"
-ENV IRODSRELEASES "$IRODSFTP/releases/$IRODSVERSION/ubuntu14"
-RUN wget -q $IRODSRELEASES/irods-icat-${IRODSVERSION}-ubuntu14-x86_64.deb
-RUN wget -q $IRODSRELEASES/irods-database-plugin-postgres-1.8-ubuntu14-x86_64.deb
-ENV IRODSGSI "$IRODSFTP/plugins/irods_auth_plugin_gsi/1.2"
+ENV IRODSRELEASES "$IRODSFTP/releases/$IRODSVERSION/$OSVERSION"
+RUN wget -q $IRODSRELEASES/irods-icat-${IRODSVERSION}-${OSVERSION}-x86_64.deb
+RUN wget -q $IRODSRELEASES/irods-database-plugin-postgres-${IRODS4VERSION}-${OSVERSION}-x86_64.deb
+ENV GSIVERSION 1.2
+ENV IRODSGSI "$IRODSFTP/plugins/irods_auth_plugin_gsi/${GSIVERSION}"
 ENV IRODSGSI_DEB /opt/gsi.deb
-RUN wget -q $IRODSGSI/irods-auth-plugin-gsi-1.2-ubuntu14-x86_64.deb -O $IRODSGSI_DEB
+RUN wget -q $IRODSGSI/irods-auth-plugin-gsi-${GSIVERSION}-${OSVERSION}-x86_64.deb -O $IRODSGSI_DEB
 
 
 ##########################################################################
@@ -58,9 +64,19 @@ USER $IRODS_USER
 # Saving configuration files for persistence on irods modifications
 #VOLUME /etc/irods
 
-## The bad hack. Change it in future docker releases,
+#################
+## The bad hack: (please change it in future docker releases)
+## I'm forced to install deb files to save the configuration
 ## when volumes mapping would probably be available and easy
 RUN yes $IRODS_PASS | sudo -S dpkg -i irods*.deb
+
+#################
+# Remove remote validation
+USER root
+RUN sed -i '36s/https[^\"]\+/off/' /etc/irods/server_config.json
+USER $IRODS_USER
+
+#################
 # Installed, so enable persistence
 RUN mkdir copy && rsync -av /etc/irods/ copy/etcirods/
 
