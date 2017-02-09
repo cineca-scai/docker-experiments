@@ -1,12 +1,12 @@
 
-##########################################################################
-# Spark and python friends
-# Last changes: 14th June, 2016
+###########################################
+# Spark & python for Data analytics course
+# Last update: 9th February, 2017
 
-FROM jupyter/all-spark-notebook
+FROM jupyter/all-spark-notebook:228ae7a44e0c
 MAINTAINER "Paolo D'Onorio De Meo <p.donoriodemeo@cineca.it>"
 
-##########################################################################
+###########################################
 # MAPREDUCE RELATED
 USER root
 
@@ -20,10 +20,10 @@ RUN apt-get update && apt-get upgrade -y && apt-get update && \
 
 # hadoop
 ENV APACHE http://www.eu.apache.org
-ENV HADOOP_VERSION hadoop-2.6.0
+ENV HADOOP_VERSION hadoop-2.6.5
 ENV HD "$APACHE/dist/hadoop/common/$HADOOP_VERSION/$HADOOP_VERSION.tar.gz"
 WORKDIR /tmp
-RUN axel -a -n 16 $HD \
+RUN axel -a -n 8 $HD \
     && tar xzvf $HADOOP_VERSION.tar.gz -C /usr/local/ \
     && rm -rf /tmp/* \
     && cd /usr/local && ln -s ./$HADOOP_VERSION hadoop
@@ -34,12 +34,12 @@ RUN mkdir -p /usr/java \
 ENV JAVA_HOME /usr/java/default/
 ENV PATH $PATH:$JAVA_HOME/bin
 
-RUN sed -i '/^export JAVA_HOME/ s:.*:export JAVA_HOME=/usr/java/default\nexport HADOOP_PREFIX=/usr/local/hadoop\nexport HADOOP_HOME=/usr/local/hadoop\n:' $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
-RUN sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop/:' $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
-RUN . $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
+RUN sed -i '/^export JAVA_HOME/ s:.*:export JAVA_HOME=/usr/java/default\nexport HADOOP_PREFIX=/usr/local/hadoop\nexport HADOOP_HOME=/usr/local/hadoop\n:' $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh \
+    && sed -i '/^export HADOOP_CONF_DIR/ s:.*:export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop/:' $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh \
+    && . $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
 
-RUN mkdir $HADOOP_PREFIX/input
-RUN cp $HADOOP_PREFIX/etc/hadoop/*.xml $HADOOP_PREFIX/input
+RUN mkdir $HADOOP_PREFIX/input \
+    && cp $HADOOP_PREFIX/etc/hadoop/*.xml $HADOOP_PREFIX/input
 
 # passwordless ssh
 RUN rm -f /etc/ssh/ssh_host_dsa_key /etc/ssh/ssh_host_rsa_key /root/.ssh/id_rsa
@@ -48,8 +48,7 @@ RUN ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key
 RUN ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa
 RUN cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
 ADD ssh_config /root/.ssh/config
-RUN chmod 600 /root/.ssh/config
-RUN chown root:root /root/.ssh/config
+RUN chmod 600 /root/.ssh/config && chown root:root /root/.ssh/config
 
 # pseudo distributed
 ADD core-site.xml.template $HADOOP_PREFIX/etc/hadoop/core-site.xml.template
@@ -103,7 +102,7 @@ RUN service ssh start \
     && hadoop fs -mkdir -p /user/$NB_USER \
     && hadoop fs -chown -R $NB_USER:$NB_USER /user/$NB_USER
 
-##########################################################################
+###################################
 # JUPYTER RELATED
 
 # Dependencies
@@ -111,22 +110,24 @@ RUN chown jovyan /opt
 # Main notebook user
 USER jovyan
 # install libs
-RUN pip install --upgrade pip
-RUN pip install plumbum jinja2 tweepy version_information
+RUN pip install --upgrade pip \
+    plumbum jinja2 tweepy version_information \
+    # Add mrjob from Yelp
+    git+https://github.com/Yelp/mrjob
 
-
+###################################
 # Update anaconda
-# RUN conda update --all -y
-# RUN conda remove backports_abc -y
-# RUN conda install python=3.5 -y
-RUN conda clean -yt 
+RUN echo "Update conda package" \
+    # && conda remove -y nbpresent \
+    && conda install -y -c damianavila82 rise \
+    && conda install -y -c pydy version_information \
+    && conda clean -y --all
 
-###############################
-# Add mrjob from Yelp
-WORKDIR /opt
-# Install and not remove from installation!
-RUN git clone https://github.com/Yelp/mrjob \
-    && cd mrjob && pip install -e .
+# ###############################
+# WORKDIR /opt
+# # Install and not remove from installation!
+# RUN git clone https://github.com/Yelp/mrjob
+#     && cd mrjob && pip install -e .
 
 # ###############################
 # Note:
@@ -138,11 +139,11 @@ RUN git clone https://github.com/Yelp/mrjob \
 #     && rm *.zip
 # # RUN python3 -m IPython.external.mathjax
 
-###############################
-# Live slideshows
-RUN wget -q https://github.com/pdonorio/RISE/archive/master.tar.gz \
-    && tar xvzf *.gz && cd *master && \
-    python setup.py install && rm -rf *.gz
+# ###############################
+# # Live slideshows
+# RUN wget -q https://github.com/pdonorio/RISE/archive/master.tar.gz \
+#     && tar xvzf *.gz && cd *master && \
+#     python setup.py install && rm -rf *.gz
 
 ###############################
 # New bootstrap?
