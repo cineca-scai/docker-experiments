@@ -30,9 +30,10 @@ fi
 cd $LECTURE_PRJ
 git checkout $LECTURE_BRANCH
 git pull origin $LECTURE_BRANCH
-chown -R $NB_UID . 2> /dev/null
+# chown -R $NB_UID . 2> /dev/null
 echo "Repo init: completed."
 cd $LECTURE_PATH
 
 export IPYTHON=1
-exec su $NB_USER -c "jupyter notebook --no-browser --ip 0.0.0.0"
+# exec su $NB_USER -c "jupyter notebook --no-browser --ip 0.0.0.0"
+jupyter notebook --no-browser --ip 0.0.0.0
