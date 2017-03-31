@@ -34,6 +34,7 @@ git pull origin $LECTURE_BRANCH
 echo "Repo init: completed."
 cd $LECTURE_PATH
 
-export IPYTHON=1
-# exec su $NB_USER -c "jupyter notebook --no-browser --ip 0.0.0.0"
-jupyter notebook --no-browser --ip 0.0.0.0
+# export IPYTHON=1
+# # exec su $NB_USER -c "jupyter notebook --no-browser --ip 0.0.0.0"
+# jupyter notebook --no-browser --ip 0.0.0.0
+start-notebook.sh
