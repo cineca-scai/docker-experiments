@@ -10,7 +10,8 @@ if [ -z $LECTURE_BRANCH ]; then
     LECTURE_BRANCH="datanalytics"
 fi
 if [ -z $LECTURE_PATH ]; then
-    LECTURE_PATH="material/spark_r_scala"
+    # LECTURE_PATH="material/spark_r_scala"
+    LECTURE_PATH="material"
 fi
 
 echo "LECTURES:"
