@@ -36,6 +36,13 @@ echo "Repo init: completed."
 cd $LECTURE_PATH
 
 ####################################
+# Trust notebooks
+# https://jupyter-notebook.readthedocs.io/en/latest/security.html#explicit-trust
+
+# TO FIX: use xargs and find
+jupyter trust */*ipynb
+
+####################################
 # LAUNCH
 
 # export IPYTHON=1
