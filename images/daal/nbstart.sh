@@ -48,7 +48,7 @@ cd $LECTURE_PATH
 # https://jupyter-notebook.readthedocs.io/en/latest/security.html#explicit-trust
 
 # TO FIX: use xargs and find
-exec su $NB_USER -c "env PATH=$PATH jupyter trust */*ipynb"
+su $NB_USER -c "env PATH=$PATH jupyter trust */*ipynb"
 
 ####################################
 # LAUNCH
@@ -60,4 +60,6 @@ if [ -z "$NB_PORT" ]; then
 fi
 
 exec su $NB_USER -c "env PATH=$PATH jupyter notebook --ip 0.0.0.0 --no-browser --port $NB_PORT "
-# sleep 1234567890
+
+#sleep 1234567890
+
