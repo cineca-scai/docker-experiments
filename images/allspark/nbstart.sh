@@ -35,7 +35,21 @@ git pull origin $LECTURE_BRANCH
 echo "Repo init: completed."
 cd $LECTURE_PATH
 
+####################################
+# Trust notebooks
+# https://jupyter-notebook.readthedocs.io/en/latest/security.html#explicit-trust
+
+# TO FIX: use xargs and find
+jupyter trust */*ipynb
+
+####################################
+# LAUNCH
+
 # export IPYTHON=1
 # # exec su $NB_USER -c "jupyter notebook --no-browser --ip 0.0.0.0"
-# jupyter notebook --no-browser --ip 0.0.0.0
-start-notebook.sh
+
+if [ -z "$NB_PORT" ]; then 
+    NB_PORT="8888"
+fi
+
+start-notebook.sh --port $NB_PORT
