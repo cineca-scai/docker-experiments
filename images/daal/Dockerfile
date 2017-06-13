@@ -38,3 +38,23 @@ COPY nbstart.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/nbstart.sh
 
 # USER $NB_USER
+
+##########################
+# Pick up some TF dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential curl libfreetype6-dev \
+    libpng12-dev libzmq3-dev \
+    pkg-config python python-dev rsync \
+    software-properties-common unzip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN pip --no-cache-dir install \
+        # ipykernel jupyter \
+        # matplotlib numpy scipy pandas \
+        sklearn Pillow \
+        && echo "done"
+        # && python -m ipykernel.kernelspec
+
+# Install TensorFlow CPU version from central repo
+RUN pip --no-cache-dir install --upgrade \
+    http://ci.tensorflow.org/view/Nightly/job/nightly-python35-linux-cpu/lastSuccessfulBuild/artifact/pip_test/whl/tensorflow-1.2.0rc2-cp35-cp35m-linux_x86_64.whl
